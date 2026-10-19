@@ -1,0 +1,28 @@
+'use strict';
+const animals={
+  parrot:{index:0,word:'PARROT',name:'앵무새',role:'정찰 · 경고 · 교란',quote:'“쉿! 사람이 온다! …사람이 온다!”',description:'높은 곳에서 수색을 지켜보고, 동료에게 위험을 알립니다. 정신없는 날갯짓으로 술래의 시선을 빼앗는 재주꾼.',skills:['하늘 날기','동료에게 경고','얼굴 앞으로 돌진'],clue:'바닥의 깃털을 따라가 보세요. 새장을 준비하면 더 좋겠죠?',alt:'날개를 펼친 붉은 앵무새 콘셉트'},
+  mouse:{index:1,word:'MOUSE',name:'쥐',role:'침투 · 유인 · 도주',quote:'“벽에도 귀가 있고, 나가는 길도 있지.”',description:'작은 벽 틈으로 사라졌다가 엉뚱한 곳에서 나타납니다. 분신으로 술래를 헷갈리게 하지만, 치즈 앞에선 작전도 잠깐 잊습니다.',skills:['벽 틈으로 이동','발가락 깨물기','분신술'],clue:'벽 안에서 긁는 소리가 들리나요? 치즈덫으로 다음 출구를 노려 보세요.',alt:'치즈를 든 작은 회색 쥐 콘셉트'},
+  chameleon:{index:2,word:'CHAMELEON',name:'카멜레온',role:'위장 · 매복 · 기습',quote:'“난 그냥 평범한 물건인데?”',description:'혀로 재빨리 자리를 옮기고, 사물인 척 술래를 속입니다. 정체를 들키면 얼굴을 내밀어 혀로 반격하는 능청스러운 위장 전문가.',skills:['혀로 이동','주변에 위장','사물 변신 · 혀 반격'],clue:'익숙한 물건도 다시 보세요. 눈치챘다면 거리를 두고 도구로 대응할 차례입니다.',alt:'꼬리를 둥글게 감은 초록 카멜레온 콘셉트'},
+  tortoise:{index:3,word:'TORTOISE',name:'거북이',role:'보호 · 버티기 · 길목 방어',quote:'“급할 것 없지. 내가 지키고 있으니까.”',description:'느려도 괜찮습니다. 단단한 껍질로 버티고, 회전하며 길목을 흔듭니다. 결정적인 순간에는 숨긴 물건을 한 번 보호합니다.',skills:['돈다! 회전 돌진','껍질 속에 숨기','물건 1회 보호'],clue:'빠르게 달아나진 못해요. 회전이 끝나는 빈틈을 기다리세요. 대응 도구는 기획 중입니다.',alt:'단단한 갈색 등껍질의 초록 거북이 콘셉트'}
+};
+const $=s=>document.querySelector(s);
+const systemReduce=matchMedia('(prefers-reduced-motion: reduce)');
+let manualReduce=false;try{manualReduce=localStorage.getItem('mc-reduce-motion')==='true'}catch{}
+const reduced=()=>manualReduce||systemReduce.matches;
+const motionToggle=$('#motion-toggle');
+function syncMotion(){document.body.classList.toggle('reduced',reduced());motionToggle.setAttribute('aria-pressed',String(reduced()));motionToggle.textContent=reduced()?'동작 줄임 · 켜짐':'동작 줄이기';if(reduced())document.getAnimations().forEach(a=>a.cancel());}
+motionToggle.addEventListener('click',()=>{manualReduce=!manualReduce;try{localStorage.setItem('mc-reduce-motion',String(manualReduce))}catch{}syncMotion();});
+systemReduce.addEventListener('change',syncMotion);
+syncMotion();
+function enter(el,delay=0){if(reduced()||!el.animate)return;el.animate([{opacity:0,transform:'translateY(24px)'},{opacity:1,transform:'translateY(0)'}],{duration:700,delay,easing:'cubic-bezier(.2,.7,.2,1)',fill:'backwards'});}
+if('IntersectionObserver'in window){const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){enter(e.target);observer.unobserve(e.target)}}),{threshold:.12});document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));}
+document.querySelectorAll('.hero-copy>*').forEach((el,i)=>enter(el,120+i*90));
+function selectAnimal(key,focus=false){const a=animals[key];document.querySelectorAll('[data-animal]').forEach(b=>{const on=b.dataset.animal===key;b.setAttribute('aria-selected',String(on));b.tabIndex=on?0:-1;if(on&&focus)b.focus();});$('#animal-panel').setAttribute('aria-labelledby','tab-'+key);$('.animal-portrait').dataset.index=a.index;$('.portrait-word').textContent=a.word;$('.animal-art').setAttribute('aria-label',a.alt);$('#animal-number').textContent='NO. 00'+(a.index+1);$('#animal-role').textContent=a.role;$('#animal-name').textContent=a.name;$('#animal-quote').textContent=a.quote;$('#animal-description').textContent=a.description;$('#animal-clue').textContent=a.clue;document.querySelectorAll('#animal-skills li span').forEach((s,i)=>s.textContent=a.skills[i]);enter($('.animal-info'));enter($('.animal-art'),60);}
+document.querySelectorAll('[data-animal]').forEach((b,i,buttons)=>{b.addEventListener('click',()=>selectAnimal(b.dataset.animal));b.addEventListener('keydown',e=>{let n;if(e.key==='ArrowRight')n=(i+1)%buttons.length;if(e.key==='ArrowLeft')n=(i+buttons.length-1)%buttons.length;if(e.key==='Home')n=0;if(e.key==='End')n=buttons.length-1;if(n!==undefined){e.preventDefault();selectAnimal(buttons[n].dataset.animal,true);}});});
+const rooms={living:['따뜻한 거실','두툼한 소파와 낮은 테이블 사이. 가장 평범한 풍경 속에 가장 대담한 위장이 숨어 있습니다.'],kitchen:['분주한 주방','찬장 아래, 식탁 다리 사이, 벽 틈 너머. 작은 발자국과 수상한 소리에 귀를 기울여 보세요.'],workshop:['비밀스러운 작업실','보관함과 선반이 만드는 복잡한 길목. 물건 하나의 위치가 수색의 방향을 바꿉니다.']};
+document.querySelectorAll('[data-room]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-room]').forEach(t=>{t.classList.toggle('active',t===b);t.setAttribute('aria-pressed',String(t===b))});const r=rooms[b.dataset.room];$('#room-label').textContent=r[0];$('#room-description').textContent=r[1];enter($('.room-note'));}));
+document.querySelectorAll('[data-side]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-side]').forEach(t=>t.setAttribute('aria-pressed',String(t===b)));$('.choice-response').textContent=b.dataset.side==='animals'?'동물 팀의 작전: 깃털은 치우고, 치즈는 참아 보고, 마지막 물건은 함께 지키기!':'술래 팀의 작전: 소리를 듣고, 흔적을 읽고, 수상한 물건은 한 번 더 살피기!';enter($('.choice-response'));}));
+for(let i=0;i<16;i++){const m=document.createElement('i');m.className='mote';m.style.left=(12+i*5.3)+'%';m.style.top=(30+(i*17)%60)+'%';m.style.setProperty('--duration',(6+i%5)+'s');m.style.setProperty('--delay',(-i*.8)+'s');$('.motes').append(m);}
+let ticking=false;
+function updateScroll(){const range=document.documentElement.scrollHeight-innerHeight;$('.reading-progress').style.transform='scaleX('+(range>0?scrollY/range:0)+')';if(!reduced()&&innerWidth>900&&scrollY<innerHeight){$('.hero-art').style.transform='translate3d(0,'+(scrollY*.13)+'px,0) scale(1.03)';}ticking=false;}
+addEventListener('scroll',()=>{if(!ticking){requestAnimationFrame(updateScroll);ticking=true;}},{passive:true});addEventListener('resize',updateScroll);updateScroll();

@@ -1,0 +1,11 @@
+{
+  "name": "monocameleon-forest-lodge",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MonoCameleon 숲속 별장 게임 홈페이지 콘셉트",
+  "scripts": {
+    "start": "node preview.cjs",
+    "check": "node check.cjs"
+  },
+  "engines": { "node": ">=22" }
+}

@@ -1,0 +1,17 @@
+node_modules/
+.env
+.env.*
+!.env.example
+.openai/
+.sites-runtime/
+.sites-checkout/
+*.log
+*.tar
+*.tar.gz
+*.zip
+qa/
+.DS_Store
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/
