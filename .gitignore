@@ -15,3 +15,6 @@ Thumbs.db
 Desktop.ini
 .idea/
 .vscode/
+
+# Keep the nested empty GitHub clone out of this repository.
+/MonoCamelon-forest-lodge/

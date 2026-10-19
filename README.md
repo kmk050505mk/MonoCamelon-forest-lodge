@@ -43,19 +43,25 @@ check.cjs                     정적 파일·링크·구문 검사
 
 ## GitHub에 올리기
 
-GitHub Desktop에서 **File → Add local repository**로 이 폴더를 선택합니다. Git 저장소가 아니라는 안내가 뜨면 이 위치에 저장소를 생성합니다. 기존 README·.gitignore를 유지하고 첫 커밋을 만든 다음 **Publish repository**를 선택합니다.
+이 프로젝트의 작업 폴더는 `C:\Users\kmk05\Desktop\works\프로젝트\MonoCameleon-forest-lodge`입니다.
 
-CLI를 사용한다면 이 폴더에서 아래 순서로 실행합니다. 원격 URL은 실제 만든 저장소 주소로 바꿉니다.
+- 원격 저장소: https://github.com/kmk050505mk/MonoCamelon-forest-lodge
+- 로컬 브랜치: `main`
+- `origin` 연결과 초기 커밋은 이미 준비되어 있습니다.
+- 내부 `MonoCamelon-forest-lodge/`는 별도로 만들어진 빈 저장소입니다. 기존 연결 정보는 보존하지만 최상위 저장소의 업로드에서는 제외합니다.
+
+GitHub Desktop에서는 **File → Add local repository**로 위 최상위 폴더를 선택합니다. Changes에서 수정 사항을 확인하고 커밋한 뒤 **Publish branch** 또는 **Push origin**을 선택합니다.
+
+CLI에서는 위 폴더에서 다음 명령을 사용합니다.
 
 ```powershell
-git init -b main
-git add .
-git commit -m "[Web] 숲속 별장 홈페이지 초기 구성"
-git remote add origin https://github.com/OWNER/REPOSITORY.git
+git status
+git add README.md .gitignore
+git commit -m "[Web] GitHub 업로드 경로와 연결 안내 정리"
 git push -u origin main
 ```
 
-원격 저장소는 README 등 초기 파일을 추가하지 않은 빈 저장소로 만들면 충돌을 피할 수 있습니다. 이번 자료 세팅에서는 원격 저장소 생성·커밋·푸시를 수행하지 않았습니다.
+인증이 필요하면 GitHub Desktop 또는 Git Credential Manager의 정상 로그인 절차를 완료합니다. 이번 재설정에서는 기존 커밋을 유지하고, 원격 연결과 업로드 제외 규칙만 정리했습니다. 실제 커밋·푸시·사이트 배포는 수행하지 않았습니다.
 
 ## GitHub Pages를 쓰고 싶다면
 
